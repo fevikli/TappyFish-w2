@@ -8,27 +8,48 @@ public class LeftMovement : MonoBehaviour
     //verables
     public float speed;
     private float groundWidth;
+    private float obstacleWidth;
     //end of variables
 
     //components
-    BoxCollider2D box;
+    private BoxCollider2D box;
     //end of components
 
     // Start is called before the first frame update
     void Start()
     {
-        box = GetComponent<BoxCollider2D>();
-        groundWidth = box.size.x;
+        if (gameObject.CompareTag("Ground"))
+        {
+            box = GetComponent<BoxCollider2D>();
+            groundWidth = box.size.x;
+        }
+        else if (gameObject.CompareTag("Obstacle"))
+        {
+            obstacleWidth = GameObject.FindGameObjectWithTag("Column").GetComponent<BoxCollider2D>().size.x;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector2(transform.position.x - speed * Time.deltaTime, transform.position.y);
-
-        if (transform.position.x <= -groundWidth)
+        if (GameManager.gameOver == false)
         {
-            transform.position = new Vector2(transform.position.x + 2 * groundWidth, transform.position.y);
+            transform.position = new Vector2(transform.position.x - speed * Time.deltaTime, transform.position.y);
+        }
+
+        if (gameObject.CompareTag("Ground"))
+        {
+            if (transform.position.x <= -groundWidth)
+            {
+                transform.position = new Vector2(transform.position.x + 2 * groundWidth, transform.position.y);
+            }
+        }
+        else if (gameObject.CompareTag("Obstacle"))
+        {
+            if (transform.position.x< GameManager.bottomLeft.x - obstacleWidth)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
