@@ -8,11 +8,17 @@ public class GameManager : MonoBehaviour
     //variables
     public static Vector2 bottomLeft;
     public static bool gameOver;
+    public static bool gameStarted;
+    public static int gameScore;
     //end  of variables
 
     //game objects
     public GameObject gameOverPanel;
+    public GameObject getReady;
+    public GameObject score;
     //end of game objects
+
+    public Score scoreScript;
 
     private void Awake()
     {
@@ -23,12 +29,21 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameOver = false;
+        gameStarted = false;
+    }
+
+    public void GameHasStarted()
+    {
+        gameStarted = true;
+        getReady.SetActive(false);
     }
 
     public void GameOver()
     {
         gameOver = true;
         gameOverPanel.SetActive(true);
+        score.SetActive(false);
+        gameScore = scoreScript.GetScore();
     }
 
     public void RestartButton()

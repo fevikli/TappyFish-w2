@@ -7,6 +7,7 @@ public class Fish : MonoBehaviour
 
     //veriables
     [SerializeField] float _speed;
+    [SerializeField] AudioSource swim, hit, point;
     private int angle;
     private int maxAngle = 20;
     private int minAngle = -60;
@@ -20,15 +21,19 @@ public class Fish : MonoBehaviour
     //classes
     public Score score;
     public GameManager gameManager;
+    public ObstacleSpawner obstacleSpawner;
     public Sprite fishDied;
     private SpriteRenderer spFish;
     private Animator fishAnim;
     //end of classes
 
+ 
+
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _rb.gravityScale = 0;
         //_rb.velocity = new Vector2(_rb.velocity.x, _speed);
         spFish = GetComponent<SpriteRenderer>();
         fishAnim = GetComponent<Animator>();
@@ -48,8 +53,26 @@ public class Fish : MonoBehaviour
     }
     private void FishSwim()
     {
+
+   
         if (Input.GetMouseButtonDown(0) && GameManager.gameOver == false)
         {
+            swim.Play();
+            if (GameManager.gameStarted == false)
+            {
+                _rb.gravityScale = 4f;
+                _rb.velocity = Vector2.zero;
+                _rb.velocity = new Vector2(_rb.velocity.x, _speed);
+                obstacleSpawner.InstantiateObstacle();
+                gameManager.GameHasStarted();
+            }
+            else
+            {
+                swim.Play();
+                _rb.velocity = Vector2.zero;
+                _rb.velocity = new Vector2(_rb.velocity.x, _speed);
+            }
+
             _rb.velocity = Vector2.zero;
             _rb.velocity = new Vector2(_rb.velocity.x, 9f);
         }
@@ -84,13 +107,20 @@ public class Fish : MonoBehaviour
         {
             Debug.Log("Scored!");
             score.Scored();
+            point.Play();
         }
-        else if (collision.gameObject.CompareTag("Column"))
+        else if (collision.gameObject.CompareTag("Column") && GameManager.gameOver == false)
         {
             //game over
+            FishDieEffect();
             gameManager.GameOver();
             //GameOver();
         }
+    }
+
+    void FishDieEffect()
+    {
+        hit.Play();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -100,6 +130,7 @@ public class Fish : MonoBehaviour
             if (GameManager.gameOver == false)
             {
                 //game over
+                FishDieEffect();
                 gameManager.GameOver();
                 GameOver();
             }
