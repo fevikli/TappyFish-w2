@@ -11,12 +11,14 @@ public class Score : MonoBehaviour
     //end of variables
    
     //components
-    Text scoreText;
+    private Text scoreText;
     public Text panelScore;
     public Text panelHighScore;
     //end of components
 
+    //game objects
     public GameObject New;
+    //end of game objects
 
     // Start is called before the first frame update
     void Start()

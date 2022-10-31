@@ -18,7 +18,9 @@ public class GameManager : MonoBehaviour
     public GameObject score;
     //end of game objects
 
+    //calesse
     public Score scoreScript;
+    //end of classes
 
     private void Awake()
     {

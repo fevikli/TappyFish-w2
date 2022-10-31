@@ -5,8 +5,12 @@ using UnityEngine.UI;
 public class Medal : MonoBehaviour
 {
 
+    //components
     public Sprite metalMedal, bronzeMedal, silverMedal, goldMedal;
     private Image img;
+    //end of components
+
+
     // Start is called before the first frame update
     void Start()
     {
